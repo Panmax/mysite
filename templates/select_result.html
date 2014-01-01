@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block style %}
+    body {
+        padding-top:80px;
+        padding-bottom: 40px;
+        background-color: #eee;
+
+    }
+    p{
+        padding-top:25px;
+    }
+{% endblock %}
+
+{% block title %}
+    {% if errors %}失败{% else %}成功{% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% if not phoneNumber %}
+            <div class="jumbotron right">
+                <h1>客官不要急，</h1>
+                <h1>请先登录 O(∩_∩)O~</h1>
+            </div>
+        {% else %}
+           {% if not errors %}
+               <div class="jumbotron">
+                    <h1>恭喜你，</h1>
+                    <h1>成功拿下这个任务！</h1>
+                    <p>请在【<a href="/task/">任务管理</a>】中查看对方信息，并及时与对方取得联系~</p>
+                </div>
+           {% else %}
+               <div class="jumbotron">
+                   {% for error in errors %}
+                       <h1>{{ error }}</h1>
+                   {% endfor %}
+               </div>
+           {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}

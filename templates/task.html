@@ -1,0 +1,319 @@
+{% extends "base.html" %}
+
+{% block title %}任务管理{% endblock %}
+
+{% block style %}
+    body {
+        padding-top:80px;
+        padding-bottom: 40px;
+        background-color: #eee;
+    }
+
+    .modal-dialog{
+        width:400px;
+    }
+
+{#    p{#}
+{#        padding-top:25px;#}
+{#    }#}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <ul class="nav nav-tabs">
+          <li><a href="#myPublish" data-toggle="tab">我发布的任务</a></li>
+          <li><a href="#myReceive" data-toggle="tab">我接收的任务</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div class="tab-pane fade in active" id="myPublish">
+              {% if publishs %}
+               <table class="table table-striped">
+                  <tr>
+                    <th>#</th>
+                    <th>发布日期</th>
+                    <th>所在校区</th>
+                    <th>上课时间</th>
+                    <th>节次</th>
+                    <th>所需性别</th>
+                    <th>酬金/元</th>
+                    <th>其它要求</th>
+                    <th>状态</th>
+                    <th>删除</th>
+                  </tr>
+                   {% for publish in publishs %}
+                       <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{  publish.publishDate|date:"Y-m-d" }}</td>
+                        <td>
+                            {% ifequal publish.college 1 %}东校区{% endifequal %}
+                            {% ifequal publish.college 2 %}主校区{% endifequal %}
+                            {% ifequal publish.college 3 %}西校区{% endifequal %}
+                            {% ifequal publish.college 4 %}中华南校区{% endifequal %}
+                            {% ifequal publish.college 5 %}丛台校区{% endifequal %}
+                            {% ifequal publish.college 6 %}邯郸学院{% endifequal %}
+                            {% ifequal publish.college 7 %}邯郸大学{% endifequal %}
+                        </td>
+                        <td>{{ publish.date|date:"Y-m-d" }}</td>
+                       <td>
+                           {% ifequal publish.time 1 %}上午 第一节{% endifequal %}
+                            {% ifequal publish.time 2 %}上午 第二节{% endifequal %}
+                            {% ifequal publish.time 3 %}下午 第一节{% endifequal %}
+                            {% ifequal publish.time 4 %}下午 第二节{% endifequal %}
+                            {% ifequal publish.time 5 %}晚上{% endifequal %}
+                       </td>
+                       <td>
+                           {% ifequal publish.sex 1 %}男{% endifequal %}
+                            {% ifequal publish.sex 2 %}女{% endifequal %}
+                            {% ifequal publish.sex 3 %}不限{% endifequal %}
+                       </td>
+                       <td>{{ publish.price }}</td>
+                       <td>
+                           {% if publish.other %}
+                                <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal{{ forloop.counter }}">
+                                  查看
+                                </button>
+
+                                <!-- Modal -->
+{#                                forloop.counter 是for循环的计数器，默认从1开始#}
+                                <div class="modal fade" id="myModal{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">其它要求</h4>
+                                      </div>
+                                      <div class="modal-body">
+                                        {{ publish.other }}
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+{#                                        <button type="button" class="btn btn-primary">Save changes</button>#}
+                                      </div>
+                                    </div><!-- /.modal-content -->
+                                  </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+                            {% else %}
+                                <button class="btn btn-default btn-xs" disabled="disabled">&nbsp;&nbsp;无&nbsp;&nbsp;</button>
+                            {% endif %}
+                       </td>
+                       <td>
+                           {% ifequal publish.state 3 %}
+                                <button class="btn btn-success btn-xs" disabled="disabled">可选</button>
+                            {% endifequal %}
+
+                            {% ifequal publish.state 2 %}
+                                <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#myPubModal{{ forloop.counter }}">
+                                      已被选
+                                    </button>
+
+                                    <!-- Modal -->
+        {#                                forloop.counter 是for循环的计数器，默认从1开始#}
+                                    <div class="modal fade" id="myPubModal{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">对方信息</h4>
+                                          </div>
+                                          <div class="modal-body">
+                                            <p></p>对方的手机号码为： <b class="text-info">{{ publish.accepter }}</b></p>
+                                              <h2>请尽快与对方取得联系~</h2>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        {#                                        <button type="button" class="btn btn-primary">Save changes</button>#}
+                                          </div>
+                                        </div><!-- /.modal-content -->
+                                      </div><!-- /.modal-dialog -->
+                                    </div><!-- /.modal -->
+                            {% endifequal %}
+
+                            {% ifequal publish.state 1 %}
+                                <button class="btn btn-danger btn-xs" disabled="disabled">已过期</button>
+                            {% endifequal %}
+
+                            {% ifequal publish.state 0 %}
+                                <button class="btn btn-danger btn-xs" disabled="disabled">已删除</button>
+                            {% endifequal %}
+                       </td>
+
+{#                       =========操作开始=========#}
+                       <td>
+                           {% ifequal publish.state 3 %}
+                                <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal{{ forloop.counter }}">
+                                  删除
+                                </button>
+
+                                <!-- Modal -->
+{#                                forloop.counter 是for循环的计数器，默认从1开始#}
+                                <div class="modal fade" id="deleteModal{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">删除确定</h4>
+                                      </div>
+                                      <div class="modal-body">
+                                        <p>确定删除吗？</p>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                        <a href="/delete/{{ publish.id }}" class="btn btn-success btn-sm" role="button">&nbsp;&nbsp;确定&nbsp;&nbsp;</a>
+{#                                          点击确定后进入select/id 的页面#}
+                                      </div>
+                                    </div><!-- /.modal-content -->
+                                  </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+                            {% else %}
+                               <button class="btn btn-danger btn-xs" disabled="disabled">删除</button>
+                            {% endifequal %}
+                       </td>
+{#                       =========操作结束=========#}
+                      </tr>
+                   {% endfor %}
+                </table>
+              {% else %}
+                  <div class="container">
+                    <div class="jumbotron">
+                        <h1>您还没有发布过任务。</h1>
+                        <p>快去【<a href="/publish/">我要找童鞋替课</a>】页面发布一个任务吧！</p>
+                    </div>
+                  </div>
+              {% endif %}
+
+          </div>
+{#        我接受的任务开始#}
+          <div class="tab-pane fade" id="myReceive">
+              {% if accepts %}
+                  <table class="table table-striped">
+                  <tr>
+                    <th>#</th>
+                    <th>发布日期</th>
+                    <th>所在校区</th>
+                    <th>上课时间</th>
+                    <th>节次</th>
+                    <th>所需性别</th>
+                    <th>酬金/元</th>
+                    <th>其它要求</th>
+                    <th>状态</th>
+                    <th>联系方式</th>
+                  </tr>
+                   {% for accept in accepts %}
+                       <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{  accept.publishDate|date:"Y-m-d" }}</td>
+                        <td>
+                            {% ifequal accept.college 1 %}东校区{% endifequal %}
+                            {% ifequal accept.college 2 %}主校区{% endifequal %}
+                            {% ifequal accept.college 3 %}西校区{% endifequal %}
+                            {% ifequal accept.college 4 %}中华南校区{% endifequal %}
+                            {% ifequal accept.college 5 %}丛台校区{% endifequal %}
+                            {% ifequal accept.college 6 %}邯郸学院{% endifequal %}
+                            {% ifequal accept.college 7 %}邯郸大学{% endifequal %}
+                        </td>
+                        <td>{{ accept.date|date:"Y-m-d" }}</td>
+                       <td>
+                           {% ifequal accept.time 1 %}上午 第一节{% endifequal %}
+                            {% ifequal accept.time 2 %}上午 第二节{% endifequal %}
+                            {% ifequal accept.time 3 %}下午 第一节{% endifequal %}
+                            {% ifequal accept.time 4 %}下午 第二节{% endifequal %}
+                            {% ifequal accept.time 5 %}晚上{% endifequal %}
+                       </td>
+                       <td>
+                           {% ifequal accept.sex 1 %}男{% endifequal %}
+                            {% ifequal accept.sex 2 %}女{% endifequal %}
+                            {% ifequal accept.sex 3 %}不限{% endifequal %}
+                       </td>
+                       <td>{{ accept.price }}</td>
+                       <td>
+                           {% if accept.other %}
+                                <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myAccModal{{ forloop.counter }}">
+                                  查看
+                                </button>
+
+                                <!-- Modal -->
+{#                                forloop.counter 是for循环的计数器，默认从1开始#}
+                                <div class="modal fade" id="myAccModal{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">其它要求</h4>
+                                      </div>
+                                      <div class="modal-body">
+                                        {{ accept.other }}
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+{#                                        <button type="button" class="btn btn-primary">Save changes</button>#}
+                                      </div>
+                                    </div><!-- /.modal-content -->
+                                  </div><!-- /.modal-dialog -->
+                                </div><!-- /.modal -->
+                            {% else %}
+                                <button class="btn btn-default btn-xs" disabled="disabled">&nbsp;&nbsp;无&nbsp;&nbsp;</button>
+                            {% endif %}
+                       </td>
+
+{#                       状态开始#}
+                       <td>
+                        {% ifequal accept.state 2 %}
+                            <button class="btn btn-warning btn-xs" disabled="disabled">已被选</button>
+                        {% endifequal %}
+
+                        {% ifequal accept.state 1 %}
+                            <button class="btn btn-danger btn-xs" disabled="disabled">已过期</button>
+                        {% endifequal %}
+                       </td>
+{#                       状态结束#}
+
+{#                       =========操作开始=========#}
+                       <td>
+                           {% ifequal accept.state 2 %}
+                              <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#myInfoModal{{ forloop.counter }}">
+                                      点击查看
+                                    </button>
+
+                                    <!-- Modal -->
+    {#                                forloop.counter 是for循环的计数器，默认从1开始#}
+                                    <div class="modal fade" id="myInfoModal{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">联系方式</h4>
+                                          </div>
+                                          <div class="modal-body">
+                                            <p></p>对方的手机号码为： <b class="text-info">{{ accept.publisher }}</b></p>
+                                              <h2>请尽快与对方取得联系~</h2>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+    {#                                        <button type="button" class="btn btn-primary">Save changes</button>#}
+                                          </div>
+                                        </div><!-- /.modal-content -->
+                                      </div><!-- /.modal-dialog -->
+                                    </div><!-- /.modal -->
+                           {% else %}
+                               <button class="btn btn-danger btn-xs" disabled="disabled">不可查看</button>
+                           {% endifequal %}
+                       </td>
+{#                       =========操作结束=========#}
+                      </tr>
+                   {% endfor %}
+                </table>
+              {% else %}
+                  <div class="container">
+                        <div class="jumbotron">
+                            <h1>您还没有接收过任务。</h1>
+                            <p>快去【<a href="/receive/">我要替童鞋上课</a>】页面接收一个任务吧！</p>
+                        </div>
+                    </div>
+              {% endif %}
+          </div>
+{#        我接受的任务结束#}
+        </div>
+    </div>
+{% endblock %}

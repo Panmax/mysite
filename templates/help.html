@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block help %}帮助页面{% endblock %}
+
+{% block style %}
+    body {
+    padding-top:100px;
+    padding-bottom: 40px;
+    background-color: #eee;}
+
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+     <table class="table">
+         <tr>
+             <td>声明在前：本站不支持IE浏览器，所以请IE粉自重。</td>
+         </tr>
+         <tr>
+             <td>
+                 欢迎来到【跷课不是好孩纸】，本站是专门为河北工程大学及其周边校区提供找人代课的平台。
+             </td>
+         </tr>
+         <tr>
+             <td>
+                 以下是本站使用方法：
+             </td>
+         </tr>
+         <tr>
+             <td>
+                 <p>一、注册帐号：</p>
+                 <p>手机号和邮箱一定要填写正确，因为以后你发布或者接受任务都是用的注册帐号时的联系方式。</p>
+                 <p><img style=" width:auto;height:580px"  src="/static/img/reg.png"></p>
+             </td>
+         </tr>
+         <tr>
+             <td>
+                 <p>二、发布找人替课的任务：</p>
+                 <p>进入【我要找童鞋替课】页面，填写相应信息，然后点击发布按钮即可。</p>
+                 <p><img style=" width:auto;height:580px"  src="/static/img/pub.png"></p>
+                 <p><img style=" width:auto;height:580px"  src="/static/img/pub_succ.png"></p>
+
+             </td>
+         </tr>
+         <tr>
+             <td>
+                 <p>三、管理我发布的任务：</p>
+                 <p>（1）任务发布成功后即可在【我要替童鞋上课】看到您刚刚发布的任务，同样，其他人也可以看到，点击其它要求的查看按钮，即可看到您发布任务时所填写其它要求。在此页面，我们不会泄漏您的任何信息，当有人接受您的任务后，只有接受任务那个人才可以看到您的联系方式。</p>
+                 <p><img style=" width:auto;height:580px"  src="/static/img/rec1.png"></p>
+                 <p><img style=" width:auto;height:580px"  src="/static/img/rec2.png"></p>
+                 <p>（2）在【任务管理】页面，可以管理您所发布的任务，在没有人接受您发布的任务前，您可以对任务进行删除操作。</p>
+                 <p><img style=" width:auto;height:580px"  src="/static/img/task.png"></p>
+             </td>
+         </tr>
+         <tr>
+             <td>
+                 <p>四、接受任务：</p>
+                 <p>现在我用另外一个帐号登录，来演示接受任务的操作。</p>
+                 <p>（1）进入【我要替同学上课】页面，可看到他人发布的任务。若状态显示为可选择，表示此任务还没有人接受，点击可选择按钮并确定后即接收此任务。</p>
+                 <p><img style=" width:auto;height:580px"  src="/static/img/rec3.png"></p>
+                 <p><img style=" width:auto;height:580px"  src="/static/img/rec_succ.png"></p>
+                 <p>当您接受一个任务后，这条任务的状态就会改为已被选，其他人就不能在接受此任务了。</p>
+                 <p><img style=" width:auto;height:580px"  src="/static/img/cant_rec.png"></p>
+                 <p>（2）当系统提示成功拿下任务后，进入【任务管理】页面，点击我[接受的任务]，就能看到您刚刚接受的那个任务，点击联系方式下的查看按钮，就可以看到对方的联系方式啦。</p>
+                 <p><img style=" width:auto;height:580px"  src="/static/img/info1.png"></p>
+                 <p><img style=" width:auto;height:580px"  src="/static/img/info2.png"></p>
+                 <p>（3）当有人接受您发布的任务后，在【任务管理】页面，查看我发布的任务，点击[已被选]按钮，可以查看接受您任务那个人的联系方式。</p>
+                 <p><img style=" width:auto;height:580px"  src="/static/img/info3.png"></p>
+                 <p>这样就建立起了发布任务方和接受任务方的联系桥梁。</p>
+             </td>
+         </tr>
+         <tr>
+             <td>
+                 到此，本平台的教程就结束了，是不是非常简单、人性化呢？
+             </td>
+         </tr>
+         <tr>
+             <td>
+                 <p>其它补充：</p>
+                 <p>1、当您发布的任务在上课那天还没人接受的话，状态就会自动转变为【已过期】，同时其他人也不能选择。</p>
+                 <p>2、发布任务时只能发布从今天起到未来七天内的任务。</p>
+             </td>
+         </tr>
+     </table>
+    </div>
+{% endblock %}
